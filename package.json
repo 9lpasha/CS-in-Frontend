@@ -4,8 +4,12 @@
   "description": "homeworks-cs-in-frontend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build-dz6": "tsc && node ./dist/dz6.js"
   },
-  "author": "Чураков Павел Сергеевич <pschurakov@vtb.ru> (4101835)",
-  "license": "ISC"
+  "author": "Чураков Павел Сергеевич",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.2"
+  }
 }

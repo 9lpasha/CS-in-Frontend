@@ -35,9 +35,9 @@ const program = [
   2,
 ];
 
-const execute = (byteCodeInstructions = []) => {
-  let operation = null;
-  let variable = null;
+const execute = (byteCodeInstructions: number[] = []) => {
+  let operation: "set" | "ifn" | "ret" | "jmp" | null = null;
+  let variable: number | null = null;
 
   for (let i = 0; i < byteCodeInstructions.length; i++) {
     if (operation) {
@@ -77,11 +77,11 @@ const execute = (byteCodeInstructions = []) => {
           break;
 
         case instructions["RET"]:
-          operation = "ifn";
+          operation = "ret";
           break;
 
         case instructions["DEC A"]:
-          variable--;
+          typeof variable === "number" && variable--;
           break;
 
         case instructions["JMP"]:
