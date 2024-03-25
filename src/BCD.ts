@@ -28,6 +28,7 @@ class BCD {
     }
   }
 
+  /** Кол-во цифр в одном элементе массива numbers по индексу элемента */
   static getDigitsLength(number: number): number {
     let currentDigit = 0;
 
@@ -41,10 +42,12 @@ class BCD {
     return currentDigit;
   }
 
+  /** Получение числа в двоичном виде */
   static binary(num: number) {
     return num.toString(2).padStart(32, "0");
   }
 
+  /** Получить дополнение до 9 */
   static get9complement(num: BCD, len: number) {
     const nums = num.numbers;
     let cursor = 0;
@@ -70,12 +73,14 @@ class BCD {
     return result;
   }
 
+  /** Сложение с дополнением до 9 отрицательного числа */
   static getSubstractWith9complement(bigger: BCD, smaller: BCD) {
     const complement = BCD.get9complement(smaller, bigger.length);
 
     return (bigger.add(complement) & (2 ** (bigger.length * 4) - 1)) + 1;
   }
 
+  /** Получить число в виду BCD */
   valueOf() {
     return this.numbers.reduce(
       (acc, cur, index) => acc | ((BigInt(cur) << (BigInt(index) * 28n)) & (2n ** 28n - 1n)),
@@ -83,21 +88,25 @@ class BCD {
     );
   }
 
+  /** Получить цифру числа по индексу */
   get(index: number) {
     if (index < 0) {
       index = this.length + index;
     }
 
     const innerIndex = index % 7;
-    const length = BCD.getDigitsLength(this.numbers[Math.floor(index / 7)]);
+    const indexedNumber = this.numbers[Math.floor(index / 7)];
+    const length = BCD.getDigitsLength(indexedNumber);
 
-    return (this.numbers[Math.floor(index / 7)] >> ((length - 1 - innerIndex) * 4)) & 15;
+    return (indexedNumber >> ((length - 1 - innerIndex) * 4)) & 15;
   }
 
+  /** Флаг отрицательности */
   get isNegative() {
     return this.numbers[0] >> 28 ? true : false;
   }
 
+  /** Получение количества цифр в десятичном числе */
   get length() {
     let result = (this.numbers.length - 1) * 7;
     let number = (this.numbers.at(-1) as number) & (2 ** 28 - 1);
@@ -110,6 +119,7 @@ class BCD {
     return result;
   }
 
+  /** Сложение с BCD параметром */
   private addBCD(second: BCD) {
     const finalLength = Math.max(this.length, second.length);
     let debt = 0;
@@ -133,11 +143,13 @@ class BCD {
     return result;
   }
 
+  /** Сложение */
   add(n: BigInt) {
     const second = new BCD(n);
     return this.addBCD(second);
   }
 
+  /** Умножение */
   multiply(n: number) {
     if (n === 0) return 0;
 
@@ -151,6 +163,7 @@ class BCD {
     return result * sign;
   }
 
+  /** Вычитание */
   substract(n: BigInt) {
     const second = new BCD(n);
 
